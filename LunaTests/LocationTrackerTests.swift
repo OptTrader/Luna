@@ -38,11 +38,11 @@ class LocationTrackerTests: XCTestCase {
             XCTAssertNotNil(manager.delegate, "Location manager delegate should not be nil")
             
             let location = CLLocation(latitude: 25.7877, longitude: -80.2241)
-            manager.delegate!.locationManager?(manager, didUpdateLocations: [location])
+            manager.delegate!.locationManager?(manager, didUpdate: [location])
         }
         
         let locationTracker = LocationTracker(locationManager: fakeLocationManager)
-        let expectation = expectationWithDescription("Should publish location change")
+        let expected = expectation(withDescription: "Should publish location change")
         
         locationTracker.addLocationChangeObserver { (result) -> () in
             switch result {
@@ -50,13 +50,13 @@ class LocationTrackerTests: XCTestCase {
                 let location = loc
                 XCTAssertEqual(location.physical.coordinate.latitude, 25.7877, "Latitude is wrong")
                 XCTAssertEqual(location.physical.coordinate.longitude, -80.2241, "Longitude is wrong")
-                expectation.fulfill()
+                expected.fulfill()
             case .Failure:
                 XCTFail("Location should be valid")
             }
         }
         
-        waitForExpectationsWithTimeout(2, handler: nil)
+        waitForExpectations(withTimeout: 2, handler: nil)
     }
     
 //    func testErrorIsPublished() {
